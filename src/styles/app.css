@@ -1,0 +1,188 @@
+body {
+    background-color: #F7FAFC;
+}
+
+.titulo-principal {
+    color: #F5008F;
+    font-weight: bold;
+}
+
+.card-casa {
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,.08);
+}
+
+.btn-casa {
+    background-color: #F5008F;
+    color: white;
+    border: none;
+    border-radius: 12px;
+}
+
+.btn-casa:hover {
+    opacity: .9;
+}
+
+/* FORMULARIO */
+
+.card-casa {
+    border: none;
+    border-radius: 24px;
+    background: white;
+    box-shadow: 0 8px 25px rgba(0,0,0,.08);
+    overflow: hidden;
+}
+
+.card-casa-header {
+    background: linear-gradient(
+        135deg,
+        #58A9B7,
+        #6EC5D6
+    );
+
+    color: white;
+
+    padding: 20px;
+}
+
+.card-casa-body {
+    padding: 24px;
+}
+
+.campo-casa {
+    border-radius: 12px;
+    border: 2px solid #E2E8F0;
+    padding: 12px;
+}
+
+.campo-casa:focus {
+    border-color: #F5008F;
+    box-shadow: 0 0 0 0.2rem rgba(245,0,143,.15);
+}
+
+.btn-casa {
+    background-color: #F5008F;
+    color: white;
+    border: none;
+    border-radius: 14px;
+    padding: 12px;
+    font-weight: 600;
+    transition: .2s;
+}
+
+.btn-casa:hover {
+    transform: translateY(-2px);
+    opacity: .95;
+}
+
+.label-casa {
+    font-weight: 600;
+    color: #2D3748;
+}
+
+/* LISTADO */
+
+.lista-casa {
+
+    border: none;
+
+    border-radius: 24px;
+
+    background: white;
+
+    box-shadow: 0 8px 25px rgba(0,0,0,.08);
+
+    overflow: hidden;
+
+}
+
+.lista-casa-header {
+
+    background: #58A9B7;
+
+    color: white;
+
+    padding: 20px;
+
+}
+
+.fila-alumno {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 16px 20px;
+
+    border-bottom: 1px solid #EDF2F7;
+
+}
+
+.fila-alumno:last-child {
+
+    border-bottom: none;
+
+}
+
+.nombre-alumno {
+
+    font-weight: 600;
+
+    color: #2D3748;
+
+}
+
+.badge-estado {
+
+    padding: 6px 12px;
+
+    border-radius: 999px;
+
+    font-size: .8rem;
+
+    font-weight: bold;
+
+}
+
+.estado-activo {
+
+    background: #C6F6D5;
+
+    color: #22543D;
+
+}
+
+.estado-inactivo {
+
+    background: #E2E8F0;
+
+    color: #4A5568;
+
+}
+
+.estado-deudor {
+
+    background: #FEEBC8;
+
+    color: #9C4221;
+
+}
+
+.btn-editar {
+
+    background: #F5008F;
+
+    color: white;
+
+    border: none;
+
+    border-radius: 10px;
+
+    padding: 8px 14px;
+
+    font-size: .9rem;
+
+}
