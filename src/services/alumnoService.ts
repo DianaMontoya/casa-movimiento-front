@@ -10,7 +10,6 @@ async () => {
 
 };
 
-
 export const guardarAlumno =
 async (alumno:any) => {
 
@@ -30,6 +29,36 @@ async (alumno:any) => {
                 alumno
             )
         }
+    );
+
+    return await response.json();
+
+};
+
+export const actualizarAlumno =
+async (alumno:any) => {
+
+    const response =
+    await fetch(
+
+        `${API_URL}/${alumno.id}`,
+
+        {
+
+            method:"PUT",
+
+            headers:{
+                "Content-Type":
+                "application/json"
+            },
+
+            body:
+            JSON.stringify(
+                alumno
+            )
+
+        }
+
     );
 
     return await response.json();

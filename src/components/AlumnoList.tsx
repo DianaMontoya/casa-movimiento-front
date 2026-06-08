@@ -56,9 +56,9 @@ function AlumnoList(
 
                             <div className="nombre-alumno">
 
-                                {a.nombre}
-                                {" "}
                                 {a.apellido}
+                                {" "}
+                                {a.nombre}
 
                             </div>
 
