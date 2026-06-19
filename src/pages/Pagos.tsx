@@ -1,94 +1,77 @@
 import { useEffect, useState } from "react";
-
 import { obtenerAlumnos } from "../services/alumnoService";
-
 import {obtenerPagos,guardarPago,actualizarPago} from "../services/pagoService";
-
 import PagoModal from "../components/PagoModal";
 
-
+/**
+ * Pantalla principal de gestión de pagos.
+ *
+ * Funcionalidades:
+ * - Registrar pagos de alumnos.
+ * - Asociar cuotas mensuales.
+ * - Buscar alumnos mediante autocompletado.
+ * - Visualizar pagos registrados.
+ * - Editar pagos existentes.
+ * - Consultar la recaudación diaria.
+ */
 function Pagos() {
 
+    // Datos generales del módulo
     const [alumnos, setAlumnos] = useState([]);
-
-    const [alumnoId, setAlumnoId] = useState("");
-
-    const [concepto, setConcepto] = useState("");
-
-    const [monto, setMonto] = useState("");
-
-    const [metodoPago, setMetodoPago] = useState("");
-
-    const [fechaPago, setFechaPago] = useState("");
-
-    const [observaciones, setObservaciones] = useState("");
-
     const [pagos, setPagos] = useState([]);
 
+    // Estados del formulario de carga
+    const [alumnoId, setAlumnoId] = useState("");
+    const [concepto, setConcepto] = useState("");
+    const [monto, setMonto] = useState("");
+    const [metodoPago, setMetodoPago] = useState("");
+    const [fechaPago, setFechaPago] = useState("");
+    const [observaciones, setObservaciones] = useState("");
+
+    // Estado del buscador de alumnos
     const [busquedaAlumno, setBusquedaAlumno]= useState("");
 
+    /*** Calcula la recaudación total del día actual. */
     const totalPorDia = pagos.reduce(
-
         (acum:number, p:any) => {
-
             const hoy =
                 new Date()
                 .toISOString()
                 .split("T")[0];
-
             if (p.fechaPago === hoy) {
-
                 return acum + Number(p.monto);
-
             }
-
             return acum;
-
         },
-
         0
-
     );
 
+    /** Cantidad de pagos registrados hoy. */
     const cantidadPagosHoy = pagos.filter(
-
         (p:any) => {
-
             const hoy =
                 new Date()
                 .toISOString()
                 .split("T")[0];
-
             return p.fechaPago === hoy;
-
         }
-
     ).length;
 
+    /** Cuotas disponibles para asignar a los pagos.*/
     const conceptosCuota = [
-
         "MARZO 2026",
-
         "ABRIL 2026",
-
         "MAYO 2026",
-
         "JUNIO 2026",
-
         "JULIO 2026",
-
         "AGOSTO 2026",
-
         "SEPTIEMBRE 2026",
-
         "OCTUBRE 2026",
-
         "NOVIEMBRE 2026",
-
         "DICIEMBRE 2026"
-
     ];
     
+    /** Filtra alumnos según el texto ingresado en el buscador desplegable. */
     const alumnosFiltrados =
         alumnos.filter(
             (a:any)=>
@@ -100,452 +83,277 @@ function Pagos() {
                     )
     );
 
+    /**Carga inicial de alumnos y pagos.*/
     useEffect(() => {
-
         cargarAlumnos();
-
         cargarPagos();
-
     }, []);
 
+    /** Obtiene todos los alumnos registrados. */
     const cargarAlumnos = async () => {
-
-        const data =
-            await obtenerAlumnos();
-
+        const data = await obtenerAlumnos();
         setAlumnos(data);
-
     };
 
+    /** Obtiene todos los pagos registrados. */
     const cargarPagos = async () => {
-
-        const data =
-            await obtenerPagos();
-
+        const data = await obtenerPagos();
         setPagos(data);
-
     };
 
-
+    /** Registra un nuevo pago y actualiza la lista. */
     const guardar = async () => {
-
         await guardarPago({
-
-            alumno: {
-                id: alumnoId
-            },
-
+            alumno: { id: alumnoId },
             concepto,
             monto,
             metodoPago,
             fechaPago,
             observaciones
-
         });
-
         await cargarPagos();
-
     };
 
+    /** Convierte fechas de formato
+     * YYYY-MM-DD a DD-MM-YYYY.
+     */
     const formatearFecha =
     (fecha:string)=>{
-
         if(!fecha)
             return "";
-
-        const partes =
-            fecha.split("-");
-
+        const partes = fecha.split("-");
         return `${partes[2]}-${partes[1]}-${partes[0]}`;
-
     };
 
-    const [mostrarModalPago,
-    setMostrarModalPago]
-    = useState(false);
+    // Estados utilizados para la edición de pagos
+    const [mostrarModalPago,setMostrarModalPago]= useState(false);
+    const [pagoSeleccionado,setPagoSeleccionado]= useState<any>(null);
 
-    const [pagoSeleccionado,
-    setPagoSeleccionado]
-    = useState<any>(null);
-
+    /** Abre el modal cargando el pago seleccionado.*/
     const abrirModalPago =
     (pago:any)=>{
-
         setPagoSeleccionado(pago);
-
         setMostrarModalPago(true);
-
     };
 
-    const guardarEdicionPago =
-async (
-    pago:any
-)=>{
+    /** Guarda los cambios realizados sobre un pago, recarga el listado y cierra el modal.*/
+    const guardarEdicionPago = async (pago:any)=>{
+        await actualizarPago(pago.id,pago);
+        await cargarPagos();
+        setMostrarModalPago(false);
+    };
+    return (
+        <div className="container mt-4">
 
-    await actualizarPago(
+            <h1 className="titulo-principal">
+                PAGOS
+            </h1>
 
-        pago.id,
+            <div className="row">
+                {/* COLUMNA IZQUIERDA */}
+                <div className="col-12 col-lg-4">
+                    <div className="card-casa">
+                        <div className="card-casa-header">
+                            <h2>
+                                Registrar Pago
+                            </h2>
+                        </div>
 
-        pago
+                        <div className="card-casa-body">
+                            <div className="buscador-alumno">
+                                <input className="form-control campo-casa" placeholder="Buscar alumno..." value={busquedaAlumno}
+                                    onChange={
+                                        e =>
+                                        setBusquedaAlumno(
+                                            e.target.value
+                                        )
+                                    }
+                                />
+                                {
+                                    busquedaAlumno.length > 0 &&
+                                    <div className="lista-desplegable">
+                                        {
+                                            alumnosFiltrados
+                                                .slice(0,10)
+                                                .map(
+                                                    (a:any)=>
+                                                    <div key={a.id} className="item-desplegable"
+                                                            onClick={() => {
+                                                                setAlumnoId(a.id);
+                                                                setBusquedaAlumno(`${a.apellido}, ${a.nombre}`);
+                                                            }}
+                                                        >
+                                                        {a.apellido},
+                                                        {" "}
+                                                        {a.nombre}
+                                                    </div>
+                                                )
+                                        }
+                                    </div>
+                                }
+                            </div>
 
-    );
+                            <select className="form-control campo-casa mt-2" value={concepto}
+                                    onChange={
+                                        e =>
+                                        setConcepto(
+                                            e.target.value
+                                        )
+                                    }
+                                >
+                                <option value="">
+                                    Seleccionar Cuota
+                                </option>
+                                {
+                                    conceptosCuota.map(
+                                        c =>
+                                        <option key={c} value={c}>
+                                            {c}
+                                        </option>
+                                    )
+                                }
+                            </select>
 
-    await cargarPagos();
-
-    setMostrarModalPago(
-        false
-    );
-
-};
-
-
- return (
-
-    <div className="container mt-4">
-
-        <h1 className="titulo-principal">
-
-            PAGOS
-
-        </h1>
-
-        <div className="row">
-
-            {/* COLUMNA IZQUIERDA */}
-
-            <div className="col-12 col-lg-4">
-
-                <div className="card-casa">
-
-                    <div className="card-casa-header">
-
-                        <h2>
-
-                            Registrar Pago
-
-                        </h2>
-
-                    </div>
-
-                    <div className="card-casa-body">
-
-                        <div className="buscador-alumno">
-
-                            <input
-                                className="form-control campo-casa"
-                                placeholder="Buscar alumno..."
-                                value={busquedaAlumno}
+                            <input className="form-control campo-casa mt-2" placeholder="Monto" value={monto}
                                 onChange={
                                     e =>
-                                    setBusquedaAlumno(
+                                    setMonto(
                                         e.target.value
                                     )
                                 }
                             />
 
-                            {
+                            <select className="form-control campo-casa mt-2" value={metodoPago}
+                                onChange={
+                                    e =>
+                                    setMetodoPago(
+                                        e.target.value
+                                    )
+                                }
+                                >
+                                <option>Efectivo</option>
+                                <option>Transferencia</option>
+                                <option>Mercado Pago</option>
+                            </select>
 
-                                busquedaAlumno.length > 0 &&
+                            <input type="date" className="form-control campo-casa mt-2" value={fechaPago}
+                                onChange={
+                                    e =>
+                                    setFechaPago(
+                                        e.target.value
+                                    )
+                                }
+                            />
 
-                                <div className="lista-desplegable">
+                            <textarea className="form-control campo-casa mt-2" placeholder="Observaciones" value={observaciones}
+                                onChange={
+                                    e =>
+                                    setObservaciones(
+                                        e.target.value
+                                    )
+                                }
+                            />
 
-                                    {
-
-                                        alumnosFiltrados
-                                            .slice(0,10)
-                                            .map(
-                                                (a:any)=>
-
-                                                <div
-                                                    key={a.id}
-                                                    className="item-desplegable"
-                                                    onClick={() => {
-
-                                                        setAlumnoId(a.id);
-
-                                                        setBusquedaAlumno(
-                                                            `${a.apellido}, ${a.nombre}`
-                                                        );
-
-                                                    }}
-                                                >
-
-                                                    {a.apellido},
-                                                    {" "}
-                                                    {a.nombre}
-
-                                                </div>
-
-                                            )
-
-                                    }
-
-                                </div>
-
-                            }
-
+                            <button className="btn-casa mt-3 w-100" onClick={guardar}>
+                                Guardar Pago
+                            </button>
                         </div>
-
-                        <select
-                            className="form-control campo-casa mt-2"
-                            value={concepto}
-                            onChange={
-                                e =>
-                                setConcepto(
-                                    e.target.value
-                                )
-                            }
-                        >
-
-                            <option value="">
-
-                                Seleccionar Cuota
-
-                            </option>
-
-                            {
-
-                                conceptosCuota.map(
-
-                                    c =>
-
-                                    <option
-                                        key={c}
-                                        value={c}
-                                    >
-
-                                        {c}
-
-                                    </option>
-
-                                )
-
-                            }
-
-                        </select>
-
-                        <input
-                            className="form-control campo-casa mt-2"
-                            placeholder="Monto"
-                            value={monto}
-                            onChange={
-                                e =>
-                                setMonto(
-                                    e.target.value
-                                )
-                            }
-                        />
-
-                        <select
-                            className="form-control campo-casa mt-2"
-                            value={metodoPago}
-                            onChange={
-                                e =>
-                                setMetodoPago(
-                                    e.target.value
-                                )
-                            }
-                        >
-
-                            <option>Efectivo</option>
-
-                            <option>Transferencia</option>
-
-                            <option>Mercado Pago</option>
-
-                        </select>
-
-                        <input
-                            type="date"
-                            className="form-control campo-casa mt-2"
-                            value={fechaPago}
-                            onChange={
-                                e =>
-                                setFechaPago(
-                                    e.target.value
-                                )
-                            }
-                        />
-
-                        <textarea
-                            className="form-control campo-casa mt-2"
-                            placeholder="Observaciones"
-                            value={observaciones}
-                            onChange={
-                                e =>
-                                setObservaciones(
-                                    e.target.value
-                                )
-                            }
-                        />
-
-                        <button
-                            className="btn-casa mt-3 w-100"
-                            onClick={guardar}
-                        >
-
-                            Guardar Pago
-
-                        </button>
-
                     </div>
-
                 </div>
 
-            </div>
+                {/* COLUMNA DERECHA */}
+                <div className="col-12 col-lg-8">
+                    <div className="resumen-financiero">
+                        <div className="card-balance">
+                            <h3>
+                                Recaudación de Hoy
+                            </h3>
 
-            {/* COLUMNA DERECHA */}
+                            <div className="monto-balance">
+                                $
+                                {totalPorDia.toLocaleString()}
+                            </div>
 
-
-            <div className="col-12 col-lg-8">
-
-
-                 <div className="resumen-financiero">
-
-                    <div className="card-balance">
-
-                        <h3>
-                            Recaudación de Hoy
-                        </h3>
-
-                        <div className="monto-balance">
-                            $
-                            {totalPorDia.toLocaleString()}
+                            <small>
+                                {cantidadPagosHoy}
+                                {" "}
+                                pagos registrados
+                            </small>
                         </div>
-
-                        <small>
-                            {cantidadPagosHoy}
-                            {" "}
-                            pagos registrados
-                        </small>
-
                     </div>
 
-                </div>
+                    <div className="lista-casa">
+                        <div className="lista-casa-header">
+                            <h2>
+                                Pagos Registrados
+                            </h2>
+                        </div>
+                        {
+                            pagos                           
+                            .sort(
+                                (a:any,b:any)=>
+                                    new Date(b.fechaPago).getTime()
+                                    -
+                                    new Date(a.fechaPago).getTime()
+                            )
+                          
+                            .map(
+                                (p:any)=>
 
+                                <div className="fila-alumno" key={p.id}>
+                                    <div className="info-pago">                     
+                                        <div className="nombre-alumno">
+                                            {p.alumno?.apellido}
+                                            {" "}
+                                            {p.alumno?.nombre}
+                                        </div>
 
-                <div className="lista-casa">
+                                        <small>
+                                            {p.concepto}
+                                        </small>
 
-                    <div className="lista-casa-header">
+                                        <br />
 
-                        <h2>
-
-                            Pagos Registrados
-
-                        </h2>
-
-                    </div>
-
-                    {
-
-                        pagos
-                        
-                         .sort(
-
-                            (a:any,b:any)=>
-
-                                new Date(b.fechaPago).getTime()
-
-                                -
-
-                                new Date(a.fechaPago).getTime()
-
-                        )
-                        
-                        .map(
-
-                            (p:any)=>
-
-                            <div
-                                className="fila-alumno"
-                                key={p.id}
-                            >
-
-                            <div className="info-pago">
-
-                         
-                                    <div className="nombre-alumno">
-
-                                        {p.alumno?.apellido}
-                                        {" "}
-                                        {p.alumno?.nombre}
-
+                                        <small className="texto-secundario">
+                                            📅 {formatearFecha(p.fechaPago)}
+                                        </small>                              
                                     </div>
 
-                                    <small>
+                                    <div className="acciones-pago">
+                                        <strong>
+                                            ${p.monto}
+                                        </strong>
 
-                                        {p.concepto}
-
-                                    </small>
-
-                                    <br />
-
-                                    <small className="texto-secundario">
-
-                                        📅 {formatearFecha(p.fechaPago)}
-
-                                    </small>
-
-                                
-                            </div>
-                            <div className="acciones-pago">
-
-                                <strong>
-
-                                    ${p.monto}
-
-                                </strong>
-
-                                <button
-                                    className="btn-editar"
-                                    onClick={
-                                        ()=>abrirModalPago(p)
-                                    }
-                                >
-
-                                    Editar
-
-                                </button>
-
-                            </div>
-
-                            </div>
-
-                        )
-
-                    }
-
+                                        <button className="btn-editar"
+                                                onClick={
+                                                    ()=>abrirModalPago(p)
+                                                }
+                                            >
+                                            Editar
+                                        </button>
+                                    </div>
+                                </div>
+                            )
+                        }
+                    </div>
                 </div>
-
             </div>
-
+            {
+                mostrarModalPago 
+                &&
+                pagoSeleccionado
+                &&
+                <PagoModal pago={pagoSeleccionado}
+                    onCerrar={
+                        ()=>setMostrarModalPago(false)
+                    }
+                    onGuardar={
+                        guardarEdicionPago
+                    }
+                />
+            }
         </div>
-
-        {
-            mostrarModalPago 
-            &&
-            pagoSeleccionado
-            &&
-            <PagoModal
-
-                pago={pagoSeleccionado}
-
-                onCerrar={
-                    ()=>setMostrarModalPago(false)
-                }
-
-                onGuardar={
-                    guardarEdicionPago
-                }
-
-            />
-        }
-
-
-    </div>
-    
-
-);
+    );
 }
 
 export default Pagos;

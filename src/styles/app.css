@@ -1,340 +1,50 @@
-/*body {
-    background-color: #F7FAFC;
-}
-
-.titulo-principal {
-    color: #F5008F;
-    font-weight: bold;
-}
-
-.card-casa {
-    border: none;
-    border-radius: 20px;
-    box-shadow: 0 4px 20px rgba(0,0,0,.08);
-}
-
-.btn-casa {
-    background-color: #F5008F;
-    color: white;
-    border: none;
-    border-radius: 12px;
-}
-
-.btn-casa:hover {
-    opacity: .9;
-}*/
-
-/* FORMULARIO */
-/*
-.card-casa {
-    border: none;
-    border-radius: 24px;
-    background: white;
-    box-shadow: 0 8px 25px rgba(0,0,0,.08);
-    overflow: hidden;
-}
-
-.card-casa-header {
-    background: linear-gradient(
-        135deg,
-        #58A9B7,
-        #6EC5D6
-    );
-
-    color: white;
-
-    padding: 20px;
-}
-
-.card-casa-body {
-    padding: 24px;
-}
-
-.campo-casa {
-    border-radius: 12px;
-    border: 2px solid #E2E8F0;
-    padding: 12px;
-}
-
-.campo-casa:focus {
-    border-color: #F5008F;
-    box-shadow: 0 0 0 0.2rem rgba(245,0,143,.15);
-}
-
-.btn-casa {
-    background-color: #F5008F;
-    color: white;
-    border: none;
-    border-radius: 14px;
-    padding: 12px;
-    font-weight: 600;
-    transition: .2s;
-}
-
-.btn-casa:hover {
-    transform: translateY(-2px);
-    opacity: .95;
-}
-
-.label-casa {
-    font-weight: 600;
-    color: #2D3748;
-}*/
-
-/* LISTADO */
-/*
-.lista-casa {
-
-    border: none;
-
-    border-radius: 24px;
-
-    background: white;
-
-    box-shadow: 0 8px 25px rgba(0,0,0,.08);
-
-    overflow: hidden;
-
-}
-
-.lista-casa-header {
-
-    background: #58A9B7;
-
-    color: white;
-
-    padding: 20px;
-
-}
-
-.fila-alumno {
-
-    display: flex;
-
-    justify-content: space-between;
-
-    align-items: center;
-
-    padding: 16px 20px;
-
-    border-bottom: 1px solid #EDF2F7;
-
-}
-
-.fila-alumno:last-child {
-
-    border-bottom: none;
-
-}
-
-.nombre-alumno {
-
-    font-weight: 600;
-
-    color: #2D3748;
-
-}
-
-.badge-estado {
-
-    padding: 6px 12px;
-
-    border-radius: 999px;
-
-    font-size: .8rem;
-
-    font-weight: bold;
-
-}
-
-.estado-activo {
-
-    background: #C6F6D5;
-
-    color: #22543D;
-
-}
-
-.estado-inactivo {
-
-    background: #E2E8F0;
-
-    color: #4A5568;
-
-}
-
-.estado-deudor {
-
-    background: #FEEBC8;
-
-    color: #9C4221;
-
-}
-
-.btn-editar {
-
-    background: #F5008F;
-
-    color: white;
-
-    border: none;
-
-    border-radius: 10px;
-
-    padding: 8px 14px;
-
-    font-size: .9rem;
-
-}
-
-.modal-overlay{
-
-    position:fixed;
-
-    top:0;
-    left:0;
-
-    width:100%;
-    height:100%;
-
-    background:
-        rgba(
-            0,
-            0,
-            0,
-            0.6
-        );
-
-    display:flex;
-
-    justify-content:center;
-    align-items:center;
-
-    z-index:999;
-}
-
-.modal-casa{
-
-    background:white;
-
-    width:90%;
-    max-width:700px;
-
-    padding:30px;
-
-    border-radius:20px;
-
-    box-shadow:
-        0 15px 40px
-        rgba(
-            0,
-            0,
-            0,
-            0.3
-        );
-}
-
-
-.contador-alumnos{
-
-    background:white;
-
-    padding:12px 18px;
-
-    border-radius:12px;
-
-    margin-bottom:15px;
-
-    font-weight:600;
-
-    box-shadow:
-        0 2px 10px
-        rgba(
-            0,
-            0,
-            0,
-            0.08
-        );
-
-}*/
-
-
 :root{
-
     --color-fondo:#0F1115;
-
     --color-panel:#171A21;
-
     --color-panel-2:#1D212A;
-
     --color-dorado:#C7A86D;
-
     --color-dorado-claro:#E4C58A;
-
     --color-texto:#F2F0EB;
-
     --color-texto-sec:#B8B2A8;
-
     --color-borde:#3A3327;
-
 }
+
 body{
-
     margin:0;
-
     background:
         linear-gradient(
             135deg,
             #0F1115,
             #171A21
         );
-
     color:var(--color-texto);
-
     font-family:
         'Montserrat',
         sans-serif;
-
     min-height:100vh;
-
 }
+
 .titulo-principal{
-
-
     font-family:
         'Cormorant Garamond',
         serif;
-
-
     text-align:center;
-
     font-size:3.2rem;
-
     letter-spacing:4px;
-
     font-weight:300;
-
     color:var(--color-dorado);
-
     text-transform:uppercase;
-
     margin-bottom:30px;
-
 }
-.card-casa{
 
+.card-casa{
     background:
         var(--color-panel);
-
     border:
-
         1px solid
         var(--color-borde);
-
     border-radius:20px;
-
     overflow:hidden;
-
     box-shadow:
         0 10px 30px
         rgba(
@@ -344,52 +54,40 @@ body{
             0.4
         );
 }
+
 .card-casa-header,
 .lista-casa-header{
-
     background:
         linear-gradient(
             90deg,
             #1C1F27,
             #242A36
         );
-
     color:
         var(--color-dorado);
-
     padding:22px;
-
     border-bottom:
         1px solid
         var(--color-borde);
-
     text-align:center;
-
 }
-.campo-casa{
 
+.campo-casa{
     background:
         var(--color-panel-2);
-
     color:
         var(--color-texto);
-
     border:
         1px solid
         var(--color-borde);
-
     border-radius:12px;
-
     padding:12px;
-
 }
-.campo-casa:focus{
 
+.campo-casa:focus{
     border-color:
         var(--color-dorado);
-
     box-shadow:
-
         0 0 10px
         rgba(
             199,
@@ -397,37 +95,27 @@ body{
             109,
             .4
         );
-
 }
+
 .btn-casa{
-
     width:100%;
-
     padding:14px;
-
     border:none;
-
     border-radius:12px;
-
     background:
         linear-gradient(
             90deg,
             #B8905B,
             #D4B074
         );
-
     color:#111;
-
     font-weight:700;
-
     transition:.3s;
-
 }
-.btn-casa:hover{
 
+.btn-casa:hover{
     transform:
         translateY(-2px);
-
     box-shadow:
         0 10px 20px
         rgba(
@@ -436,33 +124,24 @@ body{
             109,
             .3
         );
-
 }
-.lista-casa{
 
+.lista-casa{
     background:
         var(--color-panel);
-
     border-radius:20px;
-
     overflow:hidden;
-
     border:
         1px solid
         var(--color-borde);
-
 }
+
 .fila-alumno{
-
     display:flex;
-
     justify-content:
         space-between;
-
     align-items:center;
-
     padding:20px;
-
     border-bottom:
         1px solid
         rgba(
@@ -471,40 +150,30 @@ body{
             255,
             .05
         );
-
 }
 
 .btn-editar{
-
     background:
         transparent;
-
     color:
         var(--color-dorado);
-
     border:
         1px solid
         var(--color-dorado);
-
     padding:
         10px 20px;
-
     border-radius:10px;
-
     transition:.3s;
-
 }
-.btn-editar:hover{
 
+.btn-editar:hover{
     background:
         var(--color-dorado);
-
     color:
         #111;
-
 }
-.estado-activo{
 
+.estado-activo{
     background:
         rgba(
             68,
@@ -512,12 +181,11 @@ body{
             100,
             .2
         );
-
     color:
         #8BE0A8;
 }
-.estado-deudor{
 
+.estado-deudor{
     background:
         rgba(
             180,
@@ -525,12 +193,11 @@ body{
             60,
             .2
         );
-
     color:
         #F2C27A;
 }
-.estado-inactivo{
 
+.estado-inactivo{
     background:
         rgba(
             120,
@@ -538,23 +205,16 @@ body{
             120,
             .2
         );
-
     color:
         #CFCFCF;
 }
 
 .modal-overlay{
-
     position:fixed;
-
     top:0;
-
     left:0;
-
     width:100%;
-
     height:100%;
-
     background:
         rgba(
             0,
@@ -562,37 +222,24 @@ body{
             0,
             0.7
         );
-
     display:flex;
-
     justify-content:center;
-
     align-items:center;
-
     z-index:9999;
-
 }
 
 .modal-casa{
-
     background:
         var(--color-panel);
-
     color:
         var(--color-texto);
-
     width:90%;
-
     max-width:800px;
-
     padding:30px;
-
     border-radius:20px;
-
     border:
         1px solid
         var(--color-borde);
-
     box-shadow:
         0 20px 60px
         rgba(
@@ -601,27 +248,18 @@ body{
             0,
             .5
         );
-
 }
 
 .dashboard{
-
     min-height:100vh;
-
     display:flex;
-
     flex-direction:column;
-
     justify-content:center;
-
     align-items:center;
-
 }
 
 .dashboard-grid{
-
     display:grid;
-
     grid-template-columns:
         repeat(
             auto-fit,
@@ -630,43 +268,29 @@ body{
                 1fr
             )
         );
-
     gap:25px;
-
     width:100%;
-
     max-width:900px;
-
 }
 
 .card-dashboard{
-
     background:
         var(--color-panel);
-
     border:
         1px solid
         var(--color-dorado);
-
     border-radius:20px;
-
     text-decoration:none;
-
     color:
         var(--color-texto);
-
     padding:40px;
-
     text-align:center;
-
     transition:.3s;
-
 }
-.card-dashboard:hover{
 
+.card-dashboard:hover{
     transform:
         translateY(-6px);
-
     box-shadow:
         0 15px 35px
         rgba(
@@ -675,25 +299,17 @@ body{
             109,
             .25
         );
-
 }
 
 .lista-alumnos-busqueda{
-
     margin-top:10px;
-
     border-radius:12px;
-
     overflow:hidden;
-
 }
 
 .item-alumno-busqueda{
-
     padding:12px;
-
     cursor:pointer;
-
     border-bottom:
         1px solid
         rgba(
@@ -702,13 +318,10 @@ body{
             255,
             .08
         );
-
     transition:.2s;
-
 }
 
 .item-alumno-busqueda:hover{
-
     background:
         rgba(
             201,
@@ -716,42 +329,27 @@ body{
             110,
             .15
         );
-
 }
 
 .buscador-alumno{
-
     position:relative;
-
 }
 
 .lista-desplegable{
-
     position:absolute;
-
     top:100%;
-
     left:0;
-
     right:0;
-
     z-index:999;
-
     background:
         var(--color-panel);
-
     border:
         1px solid
         var(--color-dorado);
-
     border-radius:12px;
-
     margin-top:4px;
-
     max-height:250px;
-
     overflow-y:auto;
-
     box-shadow:
         0 15px 40px
         rgba(
@@ -760,21 +358,15 @@ body{
             0,
             .35
         );
-
 }
 
 .item-desplegable{
-
     padding:12px 16px;
-
     cursor:pointer;
-
     transition:.2s;
-
 }
 
 .item-desplegable:hover{
-
     background:
         rgba(
             201,
@@ -782,94 +374,98 @@ body{
             110,
             .15
         );
-
 }
 
 .resumen-financiero{
-
     margin-bottom:20px;
-
 }
 
 .card-balance{
-
     background:
         linear-gradient(
             135deg,
             rgba(201,170,110,.15),
             rgba(255,255,255,.03)
         );
-
     border:
         1px solid
         rgba(201,170,110,.35);
-
     border-radius:18px;
-
     padding:20px;
-
     backdrop-filter:blur(10px);
-
 }
 
 .monto-balance{
-
     font-size:2rem;
-
     font-weight:700;
-
     margin:10px 0;
-
 }
 
 .fecha-pago{
-
     color:#c9aa6e;
-
     font-weight:600;
-
 }
 
 .fila-alumno{
-
     display:flex;
-
     justify-content:space-between;
-
     align-items:center;
-
     padding:18px;
-
 }
 
 .info-pago{
-
     flex:1;
-
     min-width:0;
-
 }
 
 .monto-pago{
-
     width:140px;
-
     text-align:right;
-
     flex-shrink:0;
-
     font-size:1.2rem;
-
     font-weight:700;
-
 }
 
 .nombre-alumno{
-
     white-space:nowrap;
-
     overflow:hidden;
-
     text-overflow:ellipsis;
+}
 
+.balance-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:10px 0;
+    border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+/*MOVIMIENTOS*/
+.estado-ingreso{
+    background:#1d6b52;
+    color:white;
+}
+
+.estado-egreso{
+    background:#7a2e2e;
+    color:white;
+}
+
+.resumen-financiero{
+    display:flex;
+    gap:20px;
+    margin-bottom:25px;
+    flex-wrap:wrap;
+}
+
+.card-balance{
+    flex:1;
+    min-width:220px;
+}
+
+.monto-balance-negativo{
+    font-size:2rem;
+    font-weight:600;
+    color:#c85d5d;
+    margin-top:10px;
 }
