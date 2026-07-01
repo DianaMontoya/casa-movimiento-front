@@ -4,26 +4,34 @@ import {
     guardarMovimiento
 } from "../services/movimientoService";
 
-/** * Pantalla de gestión de movimientos financieros. * * Permite registrar ingresos y egresos, * visualizar el historial de movimientos * y consultar el resumen financiero del día. */
+/** * Pantalla de gestión de movimientos financieros. 
+ * * Permite registrar ingresos y egresos, 
+ * visualizar el historial de movimientos y consultar el resumen financiero del día. */
 function Movimientos(){
+    // Listado completo de movimientos registrados
     const[ movimientos, setMovimientos ] = useState([]);
+
+    // Datos del formulario
     const[ tipo, setTipo ] = useState("INGRESO");
     const[ concepto, setConcepto ] = useState("");
     const[ monto, setMonto ] = useState("");
     const[ fecha, setFecha ] = useState("");
     const[ observaciones, setObservaciones ]=useState("");
 
+    /** * Carga inicial de movimientos al ingresar a la pantalla. */
     useEffect(()=>{
         cargar();
     },[]);
 
+    /** * Obtiene todos los movimientos registrados desde el backend. */
     const cargar=
         async()=>{
             const data = await obtenerMovimientos();
             setMovimientos(data);
         };
 
-   const guardar = async()=>{
+    /** * Registra un nuevo movimiento financiero y actualiza el listado. */
+    const guardar = async()=>{
         await guardarMovimiento({
             tipo,
             concepto,
@@ -39,10 +47,12 @@ function Movimientos(){
         await cargar();
     };
 
+    /** * Fecha actual utilizada para calcular el resumen financiero diario. */
     const hoy = new Date()
         .toISOString()
         .split("T")[0];
 
+    /** * Total de ingresos registrados durante el día. */
     const ingresosHoy = movimientos
         .filter(
             (m:any)=>
@@ -56,6 +66,7 @@ function Movimientos(){
                 acum + Number( m.monto ), 0
         );
     
+    /** * Total de egresos registrados durante el día. */
     const egresosHoy = movimientos
         .filter(
             (m:any)=>
@@ -71,6 +82,7 @@ function Movimientos(){
 
     const resultadoHoy = ingresosHoy - egresosHoy;
 
+    // Renderizado de la pantalla de movimientos
     return(
         <div className="container mt-4">
             <h1 className="titulo-principal">

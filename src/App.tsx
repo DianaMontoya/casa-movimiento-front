@@ -4,6 +4,7 @@ import Alumnos from './pages/Alumnos';
 import Pagos from './pages/Pagos';
 import Balance from "./pages/Balance";
 import Movimientos from "./pages/Movimientos";
+import Layout from "./components/Layout";
 
 /**
  * Componente raíz de la aplicación.
@@ -15,23 +16,26 @@ import Movimientos from "./pages/Movimientos";
 function App(){
     return(
         <BrowserRouter>
-            <Routes>
-                {/* Dashboard principal */}
-                <Route path="/" element={<Dashboard/>}/>
 
-                {/* Gestión de alumnos */}
-                <Route path="/alumnos" element={<Alumnos/>}/>
+                <Routes >
+                    <Route element={<Layout />}>
+                    
+                        {/* Dashboard principal */}
+                        <Route path="/" element={<Dashboard/>}/>
 
-                {/* Gestión de pagos */}
-                <Route path="/pagos" element={<Pagos/>} />
+                        {/* Gestión de alumnos */}
+                        <Route path="/alumnos" element={<Alumnos/>}/>
 
-                {/* Consulta de balances y recaudación */}
-                <Route path="/balance" element={<Balance/>}/>
+                        {/* Gestión de pagos */}
+                        <Route path="/pagos" element={<Pagos/>} />
 
-                {/* Registro de ingresos y egresos */}
-                <Route path="/movimientos" element={<Movimientos />} />
+                        {/* Consulta de balances y recaudación */}
+                        <Route path="/balance" element={<Balance/>}/>
 
-            </Routes>
+                        {/* Registro de ingresos y egresos */}
+                        <Route path="/movimientos" element={<Movimientos />} />
+                    </Route>
+                </Routes>
         </BrowserRouter>
     );
 }
