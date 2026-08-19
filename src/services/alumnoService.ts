@@ -6,8 +6,7 @@ async () => {
     return await response.json();
 };
 
-export const guardarAlumno =
-async (alumno:any) => {
+export const guardarAlumno = async (alumno:any) => {
     const response = await fetch(
         API_URL,
         {
@@ -25,9 +24,7 @@ async (alumno:any) => {
     return await response.json();
 };
 
-export const actualizarAlumno =
-async (alumno:any) => {
-
+export const actualizarAlumno = async (alumno:any) => {
     const response = await fetch(
         `${API_URL}/${alumno.id}`,
         {

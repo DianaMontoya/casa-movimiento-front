@@ -1,73 +1,213 @@
-
-/** * Props de la lista de alumnos. 
- * * Recibe la colección de alumnos y la función que permite editar un registro seleccionado. */
 type Props = {
-    alumnos:any[];
-    onEditar:
-    (alumno:any)=>void;
-
+    alumnos: any[];
+    onEditar: (alumno: any) => void;
 };
 
-/** * Componente encargado de mostrar el listado de alumnos registrados en el sistema. 
- *  * Permite visualizar el estado actual de cada alumno * y acceder a la edición de sus datos. */
-function AlumnoList(
-{
+/**
+ * Componente encargado de mostrar el listado de alumnos registrados.
+ *
+ * Muestra información clave de cada alumno en columnas
+ * fijas y alineadas visualmente.
+ */
+function AlumnoList({
     alumnos,
     onEditar
-}:Props
-){
+}: Props) {
 
-    /** * Determina la clase CSS a utilizar según el estado del alumno para aplicar estilos visuales. */
-    const obtenerClaseEstado =
-    (estado:string)=>{
-        if(estado==="ACTIVO")
+    /**
+     * Determina la clase CSS según el estado del alumno.
+     */
+    const obtenerClaseEstado = (estado: string) => {
+
+        if (estado === "ACTIVO") {
             return "estado-activo";
-        if(estado==="DEUDOR")
+        }
+
+        if (estado === "DEUDOR") {
             return "estado-deudor";
+        }
+
         return "estado-inactivo";
     };
 
-    // Renderizado de la lista de alumnos
-    return(
+
+    return (
+
         <div className="lista-casa">
+
+            {/* =========================
+                HEADER
+            ========================= */}
+
             <div className="lista-casa-header">
+
                 <h2 className="m-0">
-                    Alumnos Registrados
+                    👥 Alumnos Registrados
                 </h2>
+
             </div>
 
-            {/* Listado de alumnos */}
-            {
-                alumnos.map(
-                    a=>
-                    <div className="fila-alumno" key={a.id}>
-                        <div>
-                            {/* Datos principales del alumno */}
-                            <div className="nombre-alumno">
-                                {a.apellido}
-                                {" "}
-                                {a.nombre}
-                            </div>
-                        </div>
+
+            {/* =========================
+                TABLA DE ALUMNOS
+            ========================= */}
+
+            <div className="tabla-alumnos">
+
+                {/* =========================
+                    ENCABEZADOS
+                ========================= */}
+
+                <div className="fila-alumno-lista fila-alumno-lista-header">
+
+                    <div>
+                        ALUMNO
+                    </div>
+
+                    <div>
+                        DNI
+                    </div>
+
+                    <div>
+                        TELÉFONO
+                    </div>
+
+                    <div>
+                        DISCIPLINA
+                    </div>
+
+                    <div>
+                        GRUPO
+                    </div>
+
+                    <div>
+                        NIVEL
+                    </div>
+
+                    <div>
+                        ESTADO
+                    </div>
+
+                    <div>
+                        ACCIÓN
+                    </div>
+
+                </div>
+
+
+                {/* =========================
+                    LISTADO
+                ========================= */}
+
+                {alumnos.map((a: any) => (
+
+                    <div
+                        className="fila-alumno-lista"
+                        key={a.id}
+                    >
+
+                        {/* Alumno */}
 
                         <div>
-                            <span className={`badge-estado ${obtenerClaseEstado(a.estado)}`}>
+
+                            <div className="nombre-alumno">
+                                {a.apellido} {a.nombre}
+                            </div>
+
+                        </div>
+
+
+                        {/* DNI */}
+
+                        <div>
+
+                            <small>
+                                {a.dni || "—"}
+                            </small>
+
+                        </div>
+
+
+                        {/* Teléfono */}
+
+                        <div>
+
+                            <small>
+                                {a.telefono || "—"}
+                            </small>
+
+                        </div>
+
+
+                        {/* Disciplina */}
+
+                        <div>
+
+                            <small>
+                                {a.disciplina || "—"}
+                            </small>
+
+                        </div>
+
+
+                        {/* Grupo */}
+
+                        <div>
+
+                            <small>
+                                {a.grupo || "—"}
+                            </small>
+
+                        </div>
+
+
+                        {/* Nivel */}
+
+                        <div>
+
+                            <small>
+                                {a.nivel || "—"}
+                            </small>
+
+                        </div>
+
+
+                        {/* Estado */}
+
+                        <div>
+
+                            <span
+                                className={`badge-estado ${obtenerClaseEstado(a.estado)}`}
+                            >
                                 {a.estado}
                             </span>
 
                         </div>
 
-                        {/* Acción de edición */}
+
+                        {/* Acción */}
+
                         <div>
-                            <button className="btn-editar" onClick={()=>onEditar(a)}>
+
+                            <button
+                                className="btn-editar"
+                                onClick={() => onEditar(a)}
+                            >
                                 Editar
                             </button>
+
                         </div>
+
                     </div>
-                )
-            }
+
+                ))}
+
+            </div>
+
         </div>
+
     );
+
 }
 
 export default AlumnoList;

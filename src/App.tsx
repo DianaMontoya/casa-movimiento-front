@@ -5,6 +5,8 @@ import Pagos from './pages/Pagos';
 import Balance from "./pages/Balance";
 import Movimientos from "./pages/Movimientos";
 import Layout from "./components/Layout";
+import Profesores from "./pages/Profesores";
+import Clases from "./pages/Clases";
 
 /**
  * Componente raíz de la aplicación.
@@ -26,6 +28,8 @@ function App(){
                         {/* Gestión de alumnos */}
                         <Route path="/alumnos" element={<Alumnos/>}/>
 
+                        {/* Gestión de profesores */}
+                        <Route path="/profesores" element={<Profesores />}/>
                         {/* Gestión de pagos */}
                         <Route path="/pagos" element={<Pagos/>} />
 
@@ -34,6 +38,9 @@ function App(){
 
                         {/* Registro de ingresos y egresos */}
                         <Route path="/movimientos" element={<Movimientos />} />
+
+                        {/* gestion de clases */}
+                        <Route path="/clases" element={<Clases />} />
                     </Route>
                 </Routes>
         </BrowserRouter>
