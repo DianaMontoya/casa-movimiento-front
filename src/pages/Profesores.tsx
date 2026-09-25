@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 
-import ProfesorForm from "../components/ProfesorForm";
 import ProfesorList from "../components/ProfesorList";
 import ProfesorModal from "../components/ProfesorModal";
+import ProfesorNuevoModal from "../components/ProfesorNuevoModal";
 
 import {
     obtenerProfesores,
@@ -10,36 +10,50 @@ import {
     actualizarProfesor
 } from "../services/profesorService";
 
+
 /**
  * Pantalla principal de gestión de profesores.
  *
- * Permite:
- * - Registrar nuevos profesores.
- * - Consultar el listado completo.
- * - Buscar profesores por nombre o apellido.
- * - Editar la información de un profesor.
+ * Coordina:
+ * - listado
+ * - búsqueda
+ * - alta
+ * - edición
  */
-function Profesores(){
+function Profesores() {
 
-    // Listado completo de profesores
-    const [profesores, setProfesores] = useState([]);
+    // =========================
+    // ESTADOS
+    // =========================
 
-    // Profesor seleccionado para editar
-    const [profesorEditando, setProfesorEditando] = useState<any | null>(null);
+    const [profesores, setProfesores] =
+        useState<any[]>([]);
 
-    // Texto del buscador
-    const [busqueda, setBusqueda] = useState("");
+    const [profesorEditando, setProfesorEditando] =
+        useState<any | null>(null);
 
-    /**
-     * Carga inicial al abrir la pantalla.
-     */
+    const [mostrarNuevoProfesor, setMostrarNuevoProfesor] =
+        useState(false);
+
+    const [busqueda, setBusqueda] =
+        useState("");
+
+
+    // =========================
+    // CARGA INICIAL
+    // =========================
+
     useEffect(() => {
+
         cargar();
+
     }, []);
 
-    /**
-     * Obtiene todos los profesores desde la API.
-     */
+
+    // =========================
+    // CARGAR PROFESORES
+    // =========================
+
     const cargar = async () => {
 
         const data = await obtenerProfesores();
@@ -48,10 +62,12 @@ function Profesores(){
 
     };
 
-    /**
-     * Guarda un nuevo profesor y actualiza el listado.
-     */
-    const guardar = async(profesor:any)=>{
+
+    // =========================
+    // GUARDAR NUEVO
+    // =========================
+
+    const guardar = async (profesor: any) => {
 
         await guardarProfesor(profesor);
 
@@ -59,10 +75,12 @@ function Profesores(){
 
     };
 
-    /**
-     * Actualiza un profesor existente.
-     */
-    const actualizar = async(profesor:any)=>{
+
+    // =========================
+    // ACTUALIZAR
+    // =========================
+
+    const actualizar = async (profesor: any) => {
 
         await actualizarProfesor(profesor);
 
@@ -72,122 +90,151 @@ function Profesores(){
 
     };
 
-    /**
-     * Filtra profesores por nombre o apellido.
-     */
+
+    // =========================
+    // FILTRAR
+    // =========================
+
     const profesoresFiltrados = profesores.filter(
 
-        (p:any)=>
+        (p: any) =>
 
             p.nombre
                 .toLowerCase()
-                .includes(busqueda.toLowerCase())
+                .includes(
+                    busqueda.toLowerCase()
+                )
 
             ||
 
             p.apellido
                 .toLowerCase()
-                .includes(busqueda.toLowerCase())
+                .includes(
+                    busqueda.toLowerCase()
+                )
 
     );
 
-    return(
+
+    // =========================
+    // RENDER
+    // =========================
+
+    return (
 
         <div className="container mt-4">
 
-            <h1 className="titulo-principal">
+            {/* =========================
+                ENCABEZADO
+            ========================= */}
 
-                CASA MOVIMIENTO
+            <div className="d-flex justify-content-between align-items-center mb-4">
 
-            </h1>
+                <h1 className="titulo-principal">
+                    PROFESORES
+                </h1>
 
-            <div className="row">
-
-                {/* Formulario */}
-
-                <div className="col-12 col-lg-4">
-
-                    <ProfesorForm
-                        onGuardar={guardar}
-                    />
-
-                </div>
-
-                {/* Buscador y listado */}
-
-                <div className="col-12 col-lg-8">
-
-                    <div className="mb-4">
-
-                        <input
-
-                            className="form-control campo-casa"
-
-                            placeholder="🔍 Buscar por nombre o apellido..."
-
-                            value={busqueda}
-
-                            onChange={
-                                e=>
-                                setBusqueda(
-                                    e.target.value
-                                )
-                            }
-
-                        />
-
-                    </div>
-
-                    <div className="contador-alumnos">
-
-                        {
-
-                            busqueda
-
-                            ?
-
-                            `🔍 ${profesoresFiltrados.length} coincidencia(s) para "${busqueda}"`
-
-                            :
-
-                            `👩‍🏫 ${profesoresFiltrados.length} profesor(es) registrados`
-
-                        }
-
-                    </div>
-
-                    <ProfesorList
-
-                        profesores={profesoresFiltrados}
-
-                        onEditar={
-                            (p)=>setProfesorEditando(p)
-                        }
-
-                    />
-
-                </div>
+                <button
+                    className="btn-casa"
+                    onClick={() =>
+                        setMostrarNuevoProfesor(true)
+                    }
+                    type="button"
+                >
+                    + Nuevo Profesor
+                </button>
 
             </div>
 
-            {/* Modal */}
+
+            {/* =========================
+                BUSCADOR
+            ========================= */}
+
+            <div className="mb-4">
+
+                <input
+                    className="form-control campo-casa"
+                    placeholder="🔍 Buscar por nombre o apellido..."
+                    value={busqueda}
+                    onChange={e =>
+                        setBusqueda(e.target.value)
+                    }
+                />
+
+            </div>
+
+
+            {/* =========================
+                CONTADOR
+            ========================= */}
+
+            <div className="contador-alumnos">
+
+                {
+                    busqueda
+
+                        ?
+
+                        `🔍 ${profesoresFiltrados.length} coincidencia(s) para "${busqueda}"`
+
+                        :
+
+                        `👩‍🏫 ${profesoresFiltrados.length} profesor(es) registrados`
+                }
+
+            </div>
+
+
+            {/* =========================
+                LISTADO
+            ========================= */}
+
+            <ProfesorList
+                profesores={profesoresFiltrados}
+                onEditar={p =>
+                    setProfesorEditando(p)
+                }
+            />
+
+
+            {/* =========================
+                MODAL NUEVO PROFESOR
+            ========================= */}
 
             {
+                mostrarNuevoProfesor &&
 
+                <ProfesorNuevoModal
+
+                    onCerrar={() =>
+                        setMostrarNuevoProfesor(false)
+                    }
+
+                    onGuardar={guardar}
+
+                />
+            }
+
+
+            {/* =========================
+                MODAL EDITAR PROFESOR
+            ========================= */}
+
+            {
                 profesorEditando &&
 
                 <ProfesorModal
 
                     profesor={profesorEditando}
 
-                    onCerrar={()=>
+                    onCerrar={() =>
                         setProfesorEditando(null)
                     }
 
                     onGuardar={actualizar}
 
                 />
-
             }
 
         </div>
@@ -197,3 +244,4 @@ function Profesores(){
 }
 
 export default Profesores;
+

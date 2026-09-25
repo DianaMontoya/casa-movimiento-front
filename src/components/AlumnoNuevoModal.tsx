@@ -1,19 +1,39 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 type Props = {
-    profesor: any;
     onCerrar: () => void;
-    onGuardar: (profesor: any) => void;
+    onGuardar: (alumno: any) => Promise<void>;
 };
 
+
 /**
- * Modal de edición de profesores.
+ * Obtiene la fecha actual en formato YYYY-MM-DD.
+ */
+const obtenerFechaActual = () => {
+
+    const hoy = new Date();
+
+    const year = hoy.getFullYear();
+
+    const month = String(
+        hoy.getMonth() + 1
+    ).padStart(2, "0");
+
+    const day = String(
+        hoy.getDate()
+    ).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+};
+
+
+/**
+ * Modal para registrar un nuevo alumno.
  *
  * Mantiene la misma estructura visual que AlumnoModal:
- * formulario compacto, dos columnas y secciones organizadas.
+ * dos columnas, secciones y campos compactos.
  */
-function ProfesorModal({
-    profesor,
+function AlumnoNuevoModal({
     onCerrar,
     onGuardar
 }: Props) {
@@ -28,49 +48,22 @@ function ProfesorModal({
     const [dni, setDni] = useState("");
     const [telefono, setTelefono] = useState("");
     const [email, setEmail] = useState("");
-    const [fechaIngreso, setFechaIngreso] = useState("");
-    const [especialidad, setEspecialidad] = useState("");
-    const [observaciones, setObservaciones] = useState("");
-    const [activo, setActivo] = useState(true);
+    const [fechaIngreso, setFechaIngreso] =
+        useState(obtenerFechaActual());
 
-
-    // =========================
-    // SINCRONIZAR PROFESOR
-    // =========================
-
-    useEffect(() => {
-
-        if (!profesor) {
-            return;
-        }
-
-        setNombre(profesor.nombre || "");
-        setApellido(profesor.apellido || "");
-        setFechaNacimiento(profesor.fechaNacimiento || "");
-        setDni(profesor.dni || "");
-        setTelefono(profesor.telefono || "");
-        setEmail(profesor.email || "");
-        setFechaIngreso(profesor.fechaIngreso || "");
-        setEspecialidad(profesor.especialidad || "");
-        setObservaciones(profesor.observaciones || "");
-        setActivo(
-            profesor.activo !== undefined
-                ? profesor.activo
-                : true
-        );
-
-    }, [profesor]);
+    const [disciplina, setDisciplina] = useState("");
+    const [grupo, setGrupo] = useState("");
+    const [nivel, setNivel] = useState("");
+    const [estado, setEstado] = useState("ACTIVO");
 
 
     // =========================
     // GUARDAR
     // =========================
 
-    const guardarCambios = () => {
+    const guardar = async () => {
 
-        onGuardar({
-
-            ...profesor,
+        await onGuardar({
 
             nombre,
             apellido,
@@ -79,20 +72,16 @@ function ProfesorModal({
             telefono,
             email,
             fechaIngreso,
-            especialidad,
-            observaciones,
-            activo
+            disciplina,
+            grupo,
+            nivel,
+            estado
 
         });
 
+        onCerrar();
+
     };
-
-
-    // Si no hay profesor seleccionado, no mostramos nada
-
-    if (!profesor) {
-        return null;
-    }
 
 
     // =========================
@@ -114,14 +103,23 @@ function ProfesorModal({
                     <div>
 
                         <h2>
-                            Editar Profesor
+                            Nuevo Alumno
                         </h2>
 
                         <small>
-                            {apellido} {nombre}
+                            Registrar una nueva persona
                         </small>
 
                     </div>
+
+                    <button
+                        className="modal-cerrar"
+                        onClick={onCerrar}
+                        type="button"
+                        aria-label="Cerrar"
+                    >
+                        ×
+                    </button>
 
                 </div>
 
@@ -130,7 +128,7 @@ function ProfesorModal({
 
 
                 {/* =========================
-                    FORMULARIO
+                    CUERPO
                 ========================= */}
 
                 <div className="modal-alumno-body">
@@ -241,7 +239,7 @@ function ProfesorModal({
                         </div>
 
 
-                        {/* Fecha de nacimiento */}
+                        {/* Fecha nacimiento */}
 
                         <div className="modal-field">
 
@@ -261,7 +259,7 @@ function ProfesorModal({
                         </div>
 
 
-                        {/* Fecha de ingreso */}
+                        {/* Fecha ingreso */}
 
                         <div className="modal-field">
 
@@ -287,30 +285,117 @@ function ProfesorModal({
 
 
                     {/* =========================
-                        DATOS PROFESIONALES
+                        DATOS ACADÉMICOS
                     ========================= */}
 
                     <div className="alumno-form-seccion">
-                        Datos profesionales
+                        Datos académicos
                     </div>
 
 
                     <div className="alumno-form-grid">
 
-                        {/* Especialidad */}
+                        {/* Disciplina */}
 
                         <div className="modal-field">
 
-                            <input
+                            <select
                                 className="form-control campo-casa"
-                                value={especialidad}
-                                placeholder="Especialidad"
-                                title="Especialidad"
-                                aria-label="Especialidad"
+                                value={disciplina}
+                                title="Disciplina"
+                                aria-label="Disciplina"
                                 onChange={e =>
-                                    setEspecialidad(e.target.value)
+                                    setDisciplina(e.target.value)
                                 }
-                            />
+                            >
+
+                                <option value="">
+                                    Seleccionar disciplina
+                                </option>
+
+                                <option value="introduccionaladanza">
+                                    INTRODUCCIÓN A LA DANZA
+                                </option>
+
+                                <option value="jazz">
+                                    JAZZ
+                                </option>
+
+                                <option value="libre">
+                                    LIBRE
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        {/* Grupo */}
+
+                        <div className="modal-field">
+
+                            <select
+                                className="form-control campo-casa"
+                                value={grupo}
+                                title="Grupo"
+                                aria-label="Grupo"
+                                onChange={e =>
+                                    setGrupo(e.target.value)
+                                }
+                            >
+
+                                <option value="">
+                                    Seleccionar grupo
+                                </option>
+
+                                <option value="jardin">
+                                    JARDÍN
+                                </option>
+
+                                <option value="infantil">
+                                    INFANTIL
+                                </option>
+
+                                <option value="juvenil">
+                                    JUVENIL
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        {/* Nivel */}
+
+                        <div className="modal-field">
+
+                            <select
+                                className="form-control campo-casa"
+                                value={nivel}
+                                title="Nivel"
+                                aria-label="Nivel"
+                                onChange={e =>
+                                    setNivel(e.target.value)
+                                }
+                            >
+
+                                <option value="">
+                                    Seleccionar nivel
+                                </option>
+
+                                <option value="principiante">
+                                    PRINCIPIANTE
+                                </option>
+
+                                <option value="intermedio">
+                                    INTERMEDIO
+                                </option>
+
+                                <option value="avanzado">
+                                    AVANZADO
+                                </option>
+
+                            </select>
 
                         </div>
 
@@ -321,17 +406,11 @@ function ProfesorModal({
 
                             <select
                                 className="form-control campo-casa"
-                                value={
-                                    activo
-                                        ? "ACTIVO"
-                                        : "INACTIVO"
-                                }
-                                title="Estado del profesor"
-                                aria-label="Estado del profesor"
+                                value={estado}
+                                title="Estado del alumno"
+                                aria-label="Estado del alumno"
                                 onChange={e =>
-                                    setActivo(
-                                        e.target.value === "ACTIVO"
-                                    )
+                                    setEstado(e.target.value)
                                 }
                             >
 
@@ -343,33 +422,13 @@ function ProfesorModal({
                                     INACTIVO
                                 </option>
 
+                                <option value="DEUDOR">
+                                    DEUDOR
+                                </option>
+
                             </select>
 
                         </div>
-
-                        {/* Observaciones */}
-
-                        <div className="modal-field alumno-form-full">
-
-                            <label className="modal-mini-label">
-                                Observaciones
-                            </label>
-
-                            <textarea
-                                className="form-control campo-casa"
-                                value={observaciones}
-                                placeholder="Observaciones"
-                                title="Observaciones"
-                                aria-label="Observaciones"
-                                rows={3}
-                                onChange={e =>
-                                    setObservaciones(e.target.value)
-                                }
-                            />
-
-                        </div>
-
-
 
                     </div>
 
@@ -380,14 +439,14 @@ function ProfesorModal({
                     ACCIONES
                 ========================= */}
 
-                <div className="mt-3 d-flex gap-2">
+                <div className="modal-alumno-actions">
 
                     <button
                         className="btn-casa"
-                        onClick={guardarCambios}
+                        onClick={guardar}
                         type="button"
                     >
-                        Guardar Cambios
+                        Guardar Alumno
                     </button>
 
                     <button
@@ -408,5 +467,5 @@ function ProfesorModal({
 
 }
 
-export default ProfesorModal;
+export default AlumnoNuevoModal;
 

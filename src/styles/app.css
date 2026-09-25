@@ -854,7 +854,6 @@ body{
     width:100%;
     overflow-x:auto;
 }
-
 .fila-movimiento{
     display:grid;
 
@@ -862,7 +861,8 @@ body{
         300px
         140px
         120px
-        120px;
+        120px
+        80px;
 
     align-items:center;
 
@@ -876,7 +876,12 @@ body{
 
     font-size:.76rem;
 
-    min-width:760px;
+    min-width:840px;
+}
+
+.fila-movimiento > div:last-child{
+    display:flex;
+    justify-content:flex-start;
 }
 
 
@@ -1413,3 +1418,132 @@ body{
     }
 
 }
+
+/* un pequeño retoque al modal donde se editan los Alumnos, seccion fechas*/
+.alumno-form-grid{
+    display:grid !important;
+    grid-template-columns:repeat(2, minmax(0, 1fr)) !important;
+    gap:10px 12px;
+    width:100%;
+}
+
+.modal-field{
+    width:100%;
+    min-width:0;
+}
+.modal-mini-label{
+    display:block;
+
+    margin-bottom:4px;
+
+    color:var(--color-texto-sec);
+
+    font-size:.58rem;
+
+    font-weight:500;
+
+    letter-spacing:.5px;
+
+    text-transform:uppercase;
+}
+
+
+.movimiento-modal{
+    width:90%;
+    max-width:520px;
+}
+
+.movimiento-detalle-grid{
+    display:grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:12px;
+}
+
+.movimiento-detalle-item{
+    display:flex;
+    flex-direction:column;
+
+    gap:5px;
+
+    padding:11px;
+
+    border-radius:10px;
+
+    background:
+        rgba(255,255,255,.025);
+
+    border:
+        1px solid
+        rgba(255,255,255,.06);
+}
+
+.movimiento-detalle-item span{
+    color:var(--color-texto-sec);
+
+    font-size:.62rem;
+
+    text-transform:uppercase;
+
+    letter-spacing:.7px;
+}
+
+.movimiento-detalle-item strong{
+    font-size:.78rem;
+}
+
+.movimiento-detalle-full{
+    grid-column:1 / -1;
+}
+
+.movimiento-detalle-monto{
+    color:var(--color-dorado-claro);
+
+    font-size:1rem !important;
+}
+
+@media (max-width:600px){
+
+    .movimiento-detalle-grid{
+        grid-template-columns:1fr;
+    }
+
+    .movimiento-detalle-full{
+        grid-column:auto;
+    }
+
+}
+.movimiento-detalle-item label{
+    color:var(--color-texto-sec);
+
+    font-size:.6rem;
+
+    font-weight:500;
+
+    letter-spacing:.7px;
+
+    text-transform:uppercase;
+
+    margin-bottom:4px;
+}
+
+.movimiento-detalle-item .campo-casa{
+    margin-top:0 !important;
+}
+
+
+/* Observaciones de PROFESOR */
+
+.alumno-form-full {
+    grid-column: 1 / -1;
+    width: 100%;
+}
+
+.alumno-form-full .campo-casa {
+    width: 100%;
+    box-sizing: border-box;
+    resize: vertical;
+}
+

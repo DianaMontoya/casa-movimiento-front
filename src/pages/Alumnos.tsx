@@ -1,75 +1,111 @@
-import {useEffect,useState} from 'react';
-import AlumnoList from '../components/AlumnoList';
-import AlumnoForm from '../components/AlumnoForm';
-import AlumnoModal from '../components/AlumnoModal';
+
+import { useEffect, useState } from "react";
+
+import AlumnoList from "../components/AlumnoList";
+import AlumnoModal from "../components/AlumnoModal";
+import AlumnoNuevoModal from "../components/AlumnoNuevoModal";
 
 import {
     obtenerAlumnos,
     guardarAlumno,
     actualizarAlumno
-}
-from '../services/alumnoService';
+} from "../services/alumnoService";
 
-/** * Pantalla principal de gestión de alumnos. 
- * * * Permite: 
-    * * - Registrar nuevos alumnos. 
-    * * - Consultar el listado completo. 
-    * * - Buscar alumnos por nombre o apellido. 
-    * * - Editar información existente. */
-function Alumnos(){
-    // Listado completo de alumnos obtenidos desde la API
-    const[alumnos, setAlumnos]=useState([]);
 
-    // Alumno actualmente seleccionado para edición
-    const [alumnoEditando, setAlumnoEditando] =useState<any | null>(null);
+/**
+ * Pantalla principal de gestión de alumnos.
+ *
+ * La página coordina:
+ * - listado
+ * - búsqueda
+ * - edición
+ * - apertura del modal de alta
+ */
+function Alumnos() {
 
-    // Texto ingresado en el buscador
-    const [busqueda, setBusqueda] = useState('');
+    // =========================
+    // ESTADOS
+    // =========================
 
-    /** * Carga inicial de alumnos al ingresar a la pantalla. */
-    useEffect(()=>{
+    const [alumnos, setAlumnos] = useState<any[]>([]);
+
+    const [alumnoEditando, setAlumnoEditando] =
+        useState<any | null>(null);
+
+    const [mostrarNuevoAlumno, setMostrarNuevoAlumno] =
+        useState(false);
+
+    const [busqueda, setBusqueda] =
+        useState("");
+
+
+    // =========================
+    // CARGA INICIAL
+    // =========================
+
+    useEffect(() => {
+
         cargar();
-    },[]);
+
+    }, []);
 
 
-    /** * Registra un nuevo alumno y actualiza el listado. */
-    const guardar=
-        async(alumno:any)=>{
-        await guardarAlumno(
-            alumno
-        );
-        await cargar();
-    };
+    // =========================
+    // OBTENER ALUMNOS
+    // =========================
 
-    /** * Actualiza la información de un alumno existente, cierra el modal de edición y recarga los datos. */
-    const actualizar =
-        async(alumno:any)=>{
-        await actualizarAlumno(
-            alumno
-        );
+    const cargar = async () => {
 
-        setAlumnoEditando(
-            null
-        );
+        const data = await obtenerAlumnos();
 
-        await cargar();
-    };
-
-    /** * Obtiene todos los alumnos registrados desde el backend. */
-    const cargar= async()=>{
-        const data= await obtenerAlumnos();
         setAlumnos(data);
+
     };
 
-    /** * Filtra los alumnos según el texto ingresado en el buscador. * * La búsqueda se realiza por nombre o apellido. */
+
+    // =========================
+    // GUARDAR NUEVO ALUMNO
+    // =========================
+
+    const guardar = async (alumno: any) => {
+
+        await guardarAlumno(alumno);
+
+        await cargar();
+
+    };
+
+
+    // =========================
+    // ACTUALIZAR ALUMNO
+    // =========================
+
+    const actualizar = async (alumno: any) => {
+
+        await actualizarAlumno(alumno);
+
+        setAlumnoEditando(null);
+
+        await cargar();
+
+    };
+
+
+    // =========================
+    // FILTRO
+    // =========================
+
     const alumnosFiltrados = alumnos.filter(
         (a: any) =>
+
             a.nombre
                 .toLowerCase()
                 .includes(
                     busqueda.toLowerCase()
                 )
+
             ||
+
             a.apellido
                 .toLowerCase()
                 .includes(
@@ -77,63 +113,139 @@ function Alumnos(){
                 )
     );
 
-    // Renderizado de la pantalla de alumnos
-    return(
+
+    // =========================
+    // RENDER
+    // =========================
+
+    return (
+
         <div className="container mt-4">
 
-                <h1 className="titulo-principal">
-                    CASA MOVIMIENTO
-                </h1>
-            
-                {/* Formulario de alta de alumnos */}
-                <div className="row">
-                    <div className="col-12 col-lg-4">
-                        <AlumnoForm onGuardar={guardar}/>
-                    </div>
+            {/* =========================
+                ENCABEZADO
+            ========================= */}
 
-                    {/* Listado y búsqueda de alumnos */}
-                    <div className="col-12 col-lg-8">
-                    <div className="mb-4">
-                        <input className="form-control campo-casa" placeholder="🔍 Buscar por nombre o apellido..." value={busqueda}
-                            onChange={
-                                e =>
-                                setBusqueda(
-                                    e.target.value
-                                )
-                            }
-                        />
+            <div className="d-flex justify-content-between align-items-center mb-4">
 
-                    </div>
-                    <div className="contador-alumnos">
-                        {
-                            busqueda
-                                ?
-                                `🔍 ${alumnosFiltrados.length} coincidencia(s) para "${busqueda}"`
-                                :
-                                `👥 ${alumnosFiltrados.length} alumno(s) registrados`
-                        }
+                <div>
 
-                    </div>
-                    <AlumnoList alumnos={alumnosFiltrados}
-                        onEditar={
-                            (a)=>setAlumnoEditando(a)
-                        }
-                    />
-                    </div>
+                    <h1 className="titulo-principal">
+                        ALUMNOS
+                    </h1>
+
                 </div>
-                {/* Modal de edición */}
-                {
-                    alumnoEditando &&
 
-                    <AlumnoModal alumno={alumnoEditando}
-                        onCerrar={()=>
-                            setAlumnoEditando(null)
-                        }
-                        onGuardar={actualizar}
-                    />
+
+                <button
+                    className="btn-casa"
+                    onClick={() =>
+                        setMostrarNuevoAlumno(true)
+                    }
+                    type="button"
+                >
+                    + Nuevo Alumno
+                </button>
+
+            </div>
+
+
+            {/* =========================
+                BUSCADOR
+            ========================= */}
+
+            <div className="mb-4">
+
+                <input
+                    className="form-control campo-casa"
+                    placeholder="🔍 Buscar por nombre o apellido..."
+                    value={busqueda}
+                    onChange={e =>
+                        setBusqueda(e.target.value)
+                    }
+                />
+
+            </div>
+
+
+            {/* =========================
+                CONTADOR
+            ========================= */}
+
+            <div className="contador-alumnos">
+
+                {
+                    busqueda
+
+                        ?
+
+                        `🔍 ${alumnosFiltrados.length} coincidencia(s) para "${busqueda}"`
+
+                        :
+
+                        `👥 ${alumnosFiltrados.length} alumno(s) registrados`
                 }
+
+            </div>
+
+
+            {/* =========================
+                LISTADO
+            ========================= */}
+
+            <AlumnoList
+                alumnos={alumnosFiltrados}
+                onEditar={a =>
+                    setAlumnoEditando(a)
+                }
+            />
+
+
+            {/* =========================
+                MODAL NUEVO ALUMNO
+            ========================= */}
+
+            {
+                mostrarNuevoAlumno &&
+
+                <AlumnoNuevoModal
+
+                    onCerrar={() =>
+                        setMostrarNuevoAlumno(false)
+                    }
+
+                    onGuardar={guardar}
+
+                />
+            }
+
+
+            {/* =========================
+                MODAL EDITAR ALUMNO
+            ========================= */}
+
+            {
+                alumnoEditando &&
+
+                <AlumnoModal
+
+                    alumno={alumnoEditando}
+
+                    onCerrar={() =>
+                        setAlumnoEditando(null)
+                    }
+
+                    onGuardar={actualizar}
+
+                />
+            }
+
         </div>
+
     );
+
 }
 
 export default Alumnos;
+
+

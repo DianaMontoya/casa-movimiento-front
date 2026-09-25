@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 
-import ClaseForm from "../components/ClaseForm";
 import ClaseList from "../components/ClaseList";
 import ClaseModal from "../components/ClaseModal";
+import ClaseNuevoModal from "../components/ClaseNuevoModal";
 
 import {
     obtenerClases,
@@ -10,83 +10,158 @@ import {
     actualizarClase
 } from "../services/claseService";
 
+
 /**
  * Pantalla principal de gestión de clases.
  *
- * Permite:
- * - Crear clases
- * - Listarlas
- * - Editarlas
+ * Coordina:
+ * - listado
+ * - alta
+ * - edición
  */
 function Clases() {
 
-    const [clases, setClases] = useState([]);
-    const [claseEditando, setClaseEditando] = useState<any | null>(null);
+    // =========================
+    // ESTADOS
+    // =========================
 
-    /**
-     * Carga inicial
-     */
+    const [clases, setClases] =
+        useState<any[]>([]);
+
+    const [claseEditando, setClaseEditando] =
+        useState<any | null>(null);
+
+    const [mostrarNuevaClase, setMostrarNuevaClase] =
+        useState(false);
+
+
+    // =========================
+    // CARGA INICIAL
+    // =========================
+
     useEffect(() => {
+
         cargar();
+
     }, []);
 
+
+    // =========================
+    // CARGAR CLASES
+    // =========================
+
     const cargar = async () => {
+
         const data = await obtenerClases();
+
         setClases(data);
+
     };
 
-    /**
-     * Guardar nueva clase
-     */
+
+    // =========================
+    // GUARDAR NUEVA CLASE
+    // =========================
+
     const guardar = async (clase: any) => {
+
         await guardarClase(clase);
+
         await cargar();
+
     };
 
-    /**
-     * Actualizar clase existente
-     */
+
+    // =========================
+    // ACTUALIZAR CLASE
+    // =========================
+
     const actualizar = async (clase: any) => {
+
         await actualizarClase(clase);
+
         setClaseEditando(null);
+
         await cargar();
+
     };
+
+
+    // =========================
+    // RENDER
+    // =========================
 
     return (
 
         <div className="container mt-4">
 
-            <h1 className="titulo-principal">
-                Clases
-            </h1>
+            {/* =========================
+                ENCABEZADO
+            ========================= */}
 
-            <div className="row">
+            <div className="d-flex justify-content-between align-items-center mb-4">
 
-                {/* Formulario */}
-                <div className="col-12 col-lg-4">
-                    <ClaseForm onGuardar={guardar} />
-                </div>
+                <h1 className="titulo-principal">
+                    CLASES
+                </h1>
 
-                {/* Listado */}
-                <div className="col-12 col-lg-8">
-
-                    <ClaseList
-                        clases={clases}
-                        onEditar={setClaseEditando}
-                    />
-
-                </div>
+                <button
+                    className="btn-casa"
+                    onClick={() =>
+                        setMostrarNuevaClase(true)
+                    }
+                    type="button"
+                >
+                    + Nueva Clase
+                </button>
 
             </div>
 
-            {/* Modal edición */}
+
+            {/* =========================
+                LISTADO
+            ========================= */}
+
+            <ClaseList
+                clases={clases}
+                onEditar={setClaseEditando}
+            />
+
+
+            {/* =========================
+                MODAL NUEVA CLASE
+            ========================= */}
+
+            {
+                mostrarNuevaClase &&
+
+                <ClaseNuevoModal
+
+                    onCerrar={() =>
+                        setMostrarNuevaClase(false)
+                    }
+
+                    onGuardar={guardar}
+
+                />
+            }
+
+
+            {/* =========================
+                MODAL EDITAR CLASE
+            ========================= */}
+
             {
                 claseEditando && (
+
                     <ClaseModal
                         clase={claseEditando}
-                        onCerrar={() => setClaseEditando(null)}
+                        onCerrar={() =>
+                            setClaseEditando(null)
+                        }
                         onGuardar={actualizar}
                     />
+
                 )
             }
 
@@ -97,3 +172,4 @@ function Clases() {
 }
 
 export default Clases;
+

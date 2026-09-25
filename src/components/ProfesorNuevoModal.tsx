@@ -1,19 +1,18 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 type Props = {
-    profesor: any;
     onCerrar: () => void;
-    onGuardar: (profesor: any) => void;
+    onGuardar: (profesor: any) => Promise<void>;
 };
 
+
 /**
- * Modal de edición de profesores.
+ * Modal utilizado para registrar un nuevo profesor.
  *
- * Mantiene la misma estructura visual que AlumnoModal:
- * formulario compacto, dos columnas y secciones organizadas.
+ * Mantiene la misma estructura visual que ProfesorModal:
+ * dos columnas, secciones y observaciones a ancho completo.
  */
-function ProfesorModal({
-    profesor,
+function ProfesorNuevoModal({
     onCerrar,
     onGuardar
 }: Props) {
@@ -35,42 +34,12 @@ function ProfesorModal({
 
 
     // =========================
-    // SINCRONIZAR PROFESOR
-    // =========================
-
-    useEffect(() => {
-
-        if (!profesor) {
-            return;
-        }
-
-        setNombre(profesor.nombre || "");
-        setApellido(profesor.apellido || "");
-        setFechaNacimiento(profesor.fechaNacimiento || "");
-        setDni(profesor.dni || "");
-        setTelefono(profesor.telefono || "");
-        setEmail(profesor.email || "");
-        setFechaIngreso(profesor.fechaIngreso || "");
-        setEspecialidad(profesor.especialidad || "");
-        setObservaciones(profesor.observaciones || "");
-        setActivo(
-            profesor.activo !== undefined
-                ? profesor.activo
-                : true
-        );
-
-    }, [profesor]);
-
-
-    // =========================
     // GUARDAR
     // =========================
 
-    const guardarCambios = () => {
+    const guardar = async () => {
 
-        onGuardar({
-
-            ...profesor,
+        await onGuardar({
 
             nombre,
             apellido,
@@ -85,14 +54,8 @@ function ProfesorModal({
 
         });
 
+        onCerrar();
     };
-
-
-    // Si no hay profesor seleccionado, no mostramos nada
-
-    if (!profesor) {
-        return null;
-    }
 
 
     // =========================
@@ -114,11 +77,11 @@ function ProfesorModal({
                     <div>
 
                         <h2>
-                            Editar Profesor
+                            Nuevo Profesor
                         </h2>
 
                         <small>
-                            {apellido} {nombre}
+                            Registrar un nuevo integrante del equipo
                         </small>
 
                     </div>
@@ -130,7 +93,7 @@ function ProfesorModal({
 
 
                 {/* =========================
-                    FORMULARIO
+                    CUERPO
                 ========================= */}
 
                 <div className="modal-alumno-body">
@@ -347,6 +310,7 @@ function ProfesorModal({
 
                         </div>
 
+
                         {/* Observaciones */}
 
                         <div className="modal-field alumno-form-full">
@@ -369,8 +333,6 @@ function ProfesorModal({
 
                         </div>
 
-
-
                     </div>
 
                 </div>
@@ -384,10 +346,10 @@ function ProfesorModal({
 
                     <button
                         className="btn-casa"
-                        onClick={guardarCambios}
+                        onClick={guardar}
                         type="button"
                     >
-                        Guardar Cambios
+                        Guardar Profesor
                     </button>
 
                     <button
@@ -408,5 +370,5 @@ function ProfesorModal({
 
 }
 
-export default ProfesorModal;
+export default ProfesorNuevoModal;
 

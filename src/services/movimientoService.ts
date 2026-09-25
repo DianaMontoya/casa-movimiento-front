@@ -1,44 +1,85 @@
-const API_URL = "http://localhost:8080/movimientos";
+const API = "http://localhost:8080/movimientos";
 
-export const obtenerMovimientos = async ()=>{
-    const response = await fetch(API_URL);
-    return await response.json();
-};
+/**
+ * Obtiene todos los movimientos.
+ */
+export async function obtenerMovimientos() {
 
-export const guardarMovimiento = async (movimiento:any)=>{
-    const response = await fetch(
-            API_URL,
-            {
-                method:"POST",
-                headers:{
-                    "Content-Type":
-                        "application/json"
-                },
-                body:
-                    JSON.stringify(
-                        movimiento
-                    )
-            }
+    const res = await fetch(API);
+
+    if (!res.ok) {
+        throw new Error(
+            `Error ${res.status} al obtener movimientos`
         );
-    return await response.json();
-};
+    }
 
-export const actualizarMovimiento = async ( id:number, movimiento:any )=>{
-    const response = await fetch(
-            `${API_URL}/${id}`,
-            {
-                method:"PUT",
+    return await res.json();
+}
 
-                headers:{
-                    "Content-Type":
-                        "application/json"
-                },
 
-                body:
-                    JSON.stringify(
-                        movimiento
-                    )
-            }
+/**
+ * Guarda un nuevo movimiento.
+ */
+export async function guardarMovimiento(
+    movimiento: any
+) {
+
+    const res = await fetch(API, {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify(movimiento)
+
+    });
+
+    if (!res.ok) {
+
+        const texto = await res.text();
+
+        throw new Error(
+            `Error ${res.status}: ${texto}`
         );
-    return await response.json();
-};
+    }
+
+    return await res.json();
+}
+
+
+/**
+ * Actualiza un movimiento existente.
+ */
+export async function actualizarMovimiento(
+    id: number,
+    movimiento: any
+) {
+
+    const res = await fetch(
+        `${API}/${id}`,
+        {
+
+            method: "PUT",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify(movimiento)
+
+        }
+    );
+
+    if (!res.ok) {
+
+        const texto = await res.text();
+
+        throw new Error(
+            `Error ${res.status}: ${texto}`
+        );
+    }
+
+    return await res.json();
+}

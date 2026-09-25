@@ -2,20 +2,18 @@ import { useEffect, useState } from "react";
 import { obtenerProfesores } from "../services/profesorService";
 
 type Props = {
-    clase: any;
     onCerrar: () => void;
-    onGuardar: (clase: any) => void;
+    onGuardar: (clase: any) => Promise<void>;
 };
 
+
 /**
- * Modal de edición de clases.
+ * Modal para registrar una nueva clase.
  *
- * Diseño compacto en dos columnas,
- * manteniendo la misma estética visual
- * que AlumnoModal y ProfesorModal.
+ * Mantiene la misma estructura visual que ClaseModal:
+ * dos columnas, secciones y observaciones a ancho completo.
  */
-function ClaseModal({
-    clase,
+function ClaseNuevoModal({
     onCerrar,
     onGuardar
 }: Props) {
@@ -36,59 +34,17 @@ function ClaseModal({
     const [horaFin, setHoraFin] = useState("");
     const [salon, setSalon] = useState("");
 
-    const [cupoMaximo, setCupoMaximo] = useState<number | string>("");
+    const [cupoMaximo, setCupoMaximo] =
+        useState<number | string>("");
 
-    const [observaciones, setObservaciones] = useState("");
+    const [observaciones, setObservaciones] =
+        useState("");
 
-    const [activa, setActiva] = useState(true);
+    const [activa, setActiva] =
+        useState(true);
 
-    const [profesores, setProfesores] = useState<any[]>([]);
-
-
-    // =========================
-    // SINCRONIZAR CLASE
-    // =========================
-
-    useEffect(() => {
-
-        if (!clase) {
-            return;
-        }
-
-        setNombre(clase.nombre || "");
-        setDisciplina(clase.disciplina || "");
-        setGrupo(clase.grupo || "");
-        setNivel(clase.nivel || "");
-
-        setProfesorId(
-            clase.profesor?.id
-                ? String(clase.profesor.id)
-                : ""
-        );
-
-        setDiaSemana(clase.diaSemana || "");
-        setHoraInicio(clase.horaInicio || "");
-        setHoraFin(clase.horaFin || "");
-        setSalon(clase.salon || "");
-
-        setCupoMaximo(
-            clase.cupoMaximo !== undefined &&
-            clase.cupoMaximo !== null
-                ? clase.cupoMaximo
-                : ""
-        );
-
-        setObservaciones(
-            clase.observaciones || ""
-        );
-
-        setActiva(
-            clase.activa !== undefined
-                ? clase.activa
-                : true
-        );
-
-    }, [clase]);
+    const [profesores, setProfesores] =
+        useState<any[]>([]);
 
 
     // =========================
@@ -125,20 +81,20 @@ function ClaseModal({
     // GUARDAR
     // =========================
 
-    const guardarCambios = () => {
+    const guardar = async () => {
 
-        onGuardar({
-
-            ...clase,
+        await onGuardar({
 
             nombre,
             disciplina,
             grupo,
             nivel,
 
-            profesor: {
-                id: Number(profesorId)
-            },
+            profesor: profesorId
+                ? {
+                    id: Number(profesorId)
+                }
+                : null,
 
             diaSemana,
             horaInicio,
@@ -153,15 +109,9 @@ function ClaseModal({
 
         });
 
+        onCerrar();
+
     };
-
-
-    // Si no hay clase seleccionada,
-    // no mostramos el modal.
-
-    if (!clase) {
-        return null;
-    }
 
 
     // =========================
@@ -183,16 +133,14 @@ function ClaseModal({
                     <div>
 
                         <h2>
-                            Editar Clase
+                            Nueva Clase
                         </h2>
 
                         <small>
-                            {nombre}
+                            Registrar una nueva clase
                         </small>
 
                     </div>
-
-    
 
                 </div>
 
@@ -201,7 +149,7 @@ function ClaseModal({
 
 
                 {/* =========================
-                    FORMULARIO
+                    CUERPO
                 ========================= */}
 
                 <div className="modal-alumno-body">
@@ -335,6 +283,7 @@ function ClaseModal({
                     <div className="alumno-form-seccion">
                         Horarios y ubicación
                     </div>
+
 
                     <div className="alumno-form-grid">
 
@@ -518,10 +467,10 @@ function ClaseModal({
 
                     <button
                         className="btn-casa"
-                        onClick={guardarCambios}
+                        onClick={guardar}
                         type="button"
                     >
-                        Guardar Cambios
+                        Guardar Clase
                     </button>
 
                     <button
@@ -542,5 +491,6 @@ function ClaseModal({
 
 }
 
-export default ClaseModal;
+export default ClaseNuevoModal;
+
 

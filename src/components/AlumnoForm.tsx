@@ -335,7 +335,7 @@ function AlumnoForm({
                         Disciplina
                     </label>
 
-                    <input
+                    <select
                         className="form-control campo-casa"
                         value={disciplina}
                         onChange={
@@ -344,7 +344,20 @@ function AlumnoForm({
                                     e.target.value
                                 )
                         }
-                    />
+                    >
+                        <option value="introduccionaladanza">
+                            INTRODUCCION A LA DANZA
+                        </option>
+
+                        <option value="jazz">
+                            JAZZ
+                        </option>
+
+                        <option value="libre">
+                            LIBRE
+                        </option>
+
+                    </select>
 
                 </div>
 
@@ -359,7 +372,7 @@ function AlumnoForm({
                         Grupo
                     </label>
 
-                    <input
+                    <select
                         className="form-control campo-casa"
                         value={grupo}
                         onChange={
@@ -368,10 +381,23 @@ function AlumnoForm({
                                     e.target.value
                                 )
                         }
-                    />
+                    >
+
+                        <option value="jardin">
+                            JARDIN
+                        </option>
+
+                        <option value="infantil">
+                            INFANTIL
+                        </option>
+
+                        <option value="juvenil">
+                            JUVENIL
+                        </option>
+
+                    </select>
 
                 </div>
-
 
                 {/* =========================
                     NIVEL
@@ -383,7 +409,7 @@ function AlumnoForm({
                         Nivel
                     </label>
 
-                    <input
+                    <select
                         className="form-control campo-casa"
                         value={nivel}
                         onChange={
@@ -392,7 +418,21 @@ function AlumnoForm({
                                     e.target.value
                                 )
                         }
-                    />
+                    >
+
+                        <option value="principiante">
+                            PRINCIPIANTE
+                        </option>
+
+                        <option value="intermedio">
+                            INTERMEDIO
+                        </option>
+
+                        <option value="avanzado">
+                            AVANZADO
+                        </option>
+
+                    </select>
 
                 </div>
 

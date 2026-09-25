@@ -91,22 +91,22 @@ function ModalPago({
 
                 {/* Título del formulario */}
                 <h2>
-
                     Editar Pago
-
                 </h2>
 
                 {/* Concepto del pago */}
-                <input
-                    className="form-control campo-casa mt-2"
-                    value={concepto}
-                    onChange={
-                        e=>
-                        setConcepto(
-                            e.target.value
-                        )
-                    }
-                />
+                <div className="mb-3">
+                    <input
+                        className="form-control campo-casa mt-2"
+                        value={concepto}
+                        onChange={
+                            e=>
+                            setConcepto(
+                                e.target.value
+                            )
+                        }
+                    />
+                </div>
 
                 {/* Monto abonado */}
                 <input
